@@ -31,9 +31,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var stores = await _storesRepository.GetAllAsync();
-                var getStoreDto = _mapper.Map<List<GetStoreDto>>(stores);
-
-                return getStoreDto;
+                return _mapper.Map<List<GetStoreDto>>(stores);
             }
             catch (Exception ex)
             {
@@ -48,15 +46,10 @@ namespace Ecommerce.Api.Controllers
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> DeleteStore(Guid id)
         {
-            if (!await StoreExists(id))
-            {
-                return NotFound();
-            }
-
             try
             {
-                await _storesRepository.DeleteAsync(id);
-                return NoContent();
+                bool success = await _storesRepository.DeleteAsync(id);
+                return (success) ? NoContent() : NotFound();
             }
             catch (Exception ex)
             {
@@ -85,11 +78,6 @@ namespace Ecommerce.Api.Controllers
                 _logger.LogError(ex, $"Something Went Wrong in the {nameof(PostStore)}");
                 return StatusCode(500, "Internal Server Error. Please Try Again Later.");
             }
-        }
-
-        private async Task<bool> StoreExists(Guid id)
-        {
-            return await _storesRepository.Exists(id);
         }
     }
 }

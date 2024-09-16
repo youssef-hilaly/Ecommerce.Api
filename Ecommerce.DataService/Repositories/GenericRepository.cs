@@ -32,12 +32,13 @@ namespace Ecommerce.DataService.Repositories
             return Result<T>.Success(result.Entity);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var entity = await GetAsync(id);
-            if (entity == null) return;
+            if (entity == null) return false;
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> Exists(Guid id)

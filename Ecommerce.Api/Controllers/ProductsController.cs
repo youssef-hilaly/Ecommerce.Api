@@ -63,7 +63,6 @@ namespace Ecommerce.Api.Controllers
                 var product = _mapper.Map<Product>(createProduct);
 
                 var result = await _productRepository.AddProductToStoreAsync(product, HttpContext.User);
-
                 return (result.IsSuccess) ? Created() : BadRequest(result);
             }
             catch (Exception ex)
@@ -79,13 +78,7 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var product = await _productRepository.GetAsync(updateProductDto.Id);
-                if (product == null) return NotFound();
-
-                // modify the product object that tracked by EF
-                _mapper.Map(updateProductDto, product);
-
-                var result = await _productRepository.UpdateProductToStoreAsync(product, HttpContext.User);
+                var result = await _productRepository.UpdateProductToStoreAsync(updateProductDto, HttpContext.User);
                 return (result.IsSuccess) ? NoContent() : BadRequest(result);
             }
             catch (Exception ex)

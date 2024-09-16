@@ -2,6 +2,7 @@
 using Ecommerce.DataService.Data;
 using Ecommerce.DataService.Repositories.Interfaces;
 using Ecommerce.Entities.DbSets;
+using Ecommerce.Entities.Dtos.Product;
 using Ecommerce.Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -38,8 +39,14 @@ namespace Ecommerce.DataService.Repositories
 
             return await base.AddAsync(product);
         }
-        public async Task<Result<Product>> UpdateProductToStoreAsync(Product product, ClaimsPrincipal userClaim)
+        public async Task<Result<Product>> UpdateProductToStoreAsync(UpdateProductDto updateProductDto, ClaimsPrincipal userClaim)
         {
+            var product = await GetAsync(updateProductDto.Id);
+            if (product == null) return Result<Product>.Failure("Product not found");
+
+            // modify the product object that tracked by EF
+            _mapper.Map(updateProductDto, product);
+
             var result = await IsStoreOwner(product.StoreId, userClaim);
             if (!result.IsSuccess) return result;
 

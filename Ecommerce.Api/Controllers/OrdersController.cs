@@ -33,7 +33,6 @@ namespace Ecommerce.Api.Controllers
                 var product = _mapper.Map<List<OrderItem>>(createOrderItems);
 
                 var result = await _ordersRepository.CreateOrder(product, HttpContext.User);
-
                 return (result.IsSuccess) ? Created() : BadRequest(result);
             }
             catch (Exception ex)

@@ -13,7 +13,7 @@ namespace Ecommerce.DataService.Repositories.Interfaces
         Task<List<T>> GetAllAsync();
         Task<Result<T>> AddAsync(T entity);
         Task UpdateAsync(T entity);
-        Task DeleteAsync(Guid id);
+        Task<bool> DeleteAsync(Guid id);
         Task<bool> Exists(Guid id);
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ecommerce.DataService.Repositories
 {
@@ -60,6 +61,16 @@ namespace Ecommerce.DataService.Repositories
 
         public async Task<IEnumerable<IdentityError>> Register(UserDto userDto)
         {
+
+            //if (errors.Any())
+            //{
+            //    foreach (var error in errors)
+            //    {
+            //        ModelState.AddModelError(error.Code, error.Description);
+            //    }
+            //    return BadRequest(ModelState);
+            //}
+
             bool adminRoleExists = await _roleManager.RoleExistsAsync(userDto.Role);
             if (!adminRoleExists)
             {

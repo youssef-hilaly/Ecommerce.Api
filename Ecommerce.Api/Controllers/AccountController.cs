@@ -32,16 +32,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var errors = await _authManager.Register(userDto);
-                if (errors.Any())
-                {
-                    foreach (var error in errors)
-                    {
-                        ModelState.AddModelError(error.Code, error.Description);
-                    }
-                    return BadRequest(ModelState);
-                }
-
-                return Ok();
+                return errors.Any() ? BadRequest(errors) : Ok();
             }
             catch (Exception ex)
             {
